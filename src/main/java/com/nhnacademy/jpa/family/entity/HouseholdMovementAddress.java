@@ -40,6 +40,6 @@ public class HouseholdMovementAddress {
         private Integer householdId;
 
         @Column(name = "house_movement_report_date")
-        private LocalDate reportDate;
+        private LocalDate movementReportDate;
     }
 }

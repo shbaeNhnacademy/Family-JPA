@@ -29,6 +29,6 @@ public class Household {
     private CompositionReason reason;
 
     @Column(name = "current_house_movement_address")
-    private String movementAddress;
+    private String currentMovementAddress;
 
 }
