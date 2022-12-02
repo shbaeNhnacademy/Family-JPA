@@ -1,0 +1,16 @@
+###
+POST /residents HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Encoding: utf-8
+
+{
+  "name": "테스트",
+  "registrationNumber" : "20221202-3111111",
+  "gender" : "남",
+  "birthDate" : "2022-12-02 12:01:00",
+  "birthPlace": "병원",
+  "registrationAddress": "경남 창원시 마산회원구 중리상곡로 114"
+}
+
+###

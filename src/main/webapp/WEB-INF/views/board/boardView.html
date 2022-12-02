@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세 페이지</title>
+</head>
+<body>
+<h2>게시글 상세 페이지</h2><br/>
+<div th:if="${not #strings.isEmpty(access)}">
+    <form method="get" th:action="@{/boards/modify/{id}(id=${board.id})}">
+        <input type="submit" value="수정" />
+    </form>
+    <form method="post" th:action="@{/boards/delete/{id}(id=${board.id})}">
+        <input type="submit" value="삭제" />
+    </form>
+    <br><hr>
+</div>
+
+No. : <span th:text="${board.id}"></span><br/>
+제목 : <span th:text="${board.title}"></span><br/>
+작성자 : <span style="font-weight: bold" th:text="${board.writer.username}"></span><br/>
+작성일자 : <span th:text="${board.writedAt}"></span><br/>
+<div th:if="${board.modifier != null}">
+    수정자 : <span style="color: royalblue" th:text="${board.modifier.username}"></span><br/>
+    수정일자 : <span style="color: royalblue" th:text="${board.modifiedAt}"></span><br/>
+</div>
+본문 : <span th:text="${board.content}"></span><br/><br/>
+<!--  댓글 :-->
+<!--  <ul th:each="file:${inquiry.files}" >-->
+<!--      <li>-->
+<!--          <a th:href="@{/cs/inquiry/{id}/{filename}/view(id=${inquiry.id},filename=${file.getOriginalFilename()})}" th:text="${file.getOriginalFilename()} "></a><br/>-->
+<!--      </li>-->
+<!--  </ul>-->
+<br/>
+<hr/>
+<div th:if="${not #strings.isEmpty(login)}">
+    <form method="post" th:action="@{/boards/{id}/comment/(id=${board.id})}">
+        댓글 작성자 : <input type="text" name="login" th:value="${login}" readonly/><br/>
+        댓글 : <textarea name="answerContent" rows="2" cols="80"></textarea><br/>
+        <input type="submit" value="확인"/> &nbsp;
+    </form>
+</div>
+<br><br><br>
+<a th:href="@{/boards/list(page=${0},size=${5})}">게시글 목록</a><br>
+</body>
+</html>
