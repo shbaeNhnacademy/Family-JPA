@@ -3,10 +3,12 @@ package com.nhnacademy.jpa.family.repository;
 import com.nhnacademy.jpa.family.config.RootConfig;
 import com.nhnacademy.jpa.family.config.WebConfig;
 import com.nhnacademy.jpa.family.domain.FamilyRelationDto;
+import com.nhnacademy.jpa.family.domain.ResidentModifyRequest;
 import com.nhnacademy.jpa.family.domain.SerialNumberOnly;
 import com.nhnacademy.jpa.family.entity.Resident;
 import com.nhnacademy.jpa.family.entity.code.BirthPlace;
 import com.nhnacademy.jpa.family.entity.code.Gender;
+import com.nhnacademy.jpa.family.exception.ResidentModifyFailException;
 import com.nhnacademy.jpa.family.exception.ResidentNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,9 +19,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,7 +40,7 @@ class ResidentRepositoryTest {
     void findById() {
         int sn = 1;
         Optional<Resident> byId = residentRepository.findById(sn);
-        Resident resident = byId.orElseThrow(() -> new ResidentNotFoundException());
+        Resident resident = byId.orElseThrow(() -> new ResidentNotFoundException(sn));
         assertThat(resident.getName()).isEqualTo("남길동");
         System.out.println("resident = " + resident);
     }
@@ -47,7 +49,7 @@ class ResidentRepositoryTest {
     void findByName() {
         String name = "남기준";
         Optional<Resident> byId = residentRepository.findByName(name);
-        Resident resident = byId.orElseThrow(() -> new ResidentNotFoundException());
+        Resident resident = byId.orElseThrow(() -> new ResidentNotFoundException(name));
         assertThat(resident.getName()).isEqualTo(name);
         System.out.println("resident = " + resident);
     }
@@ -92,6 +94,52 @@ class ResidentRepositoryTest {
     void findFirstByOrderBySerialNumberDesc() {
         SerialNumberOnly numberDesc = residentRepository.findFirstByOrderBySerialNumberDesc();
         System.out.println("numberDesc = " + numberDesc.getSerialNumber());
+    }
+
+    @Test
+    void test1() {
+        Optional<Resident> byId = residentRepository.findById(1);
+        Resident resident = byId.orElse(new Resident());
+        ResidentModifyRequest modifyRequest = ResidentModifyRequest.builder()
+                .name("wwww")
+                .gender(Gender.여)
+                .build();
+        applyModifyProperties(resident, modifyRequest);
+        System.out.println("resident = " + resident);
+
+
+
+//        Field[] declaredFields2 = resident.getClass().getDeclaredFields();
+//        Field[] declaredFields = wwww.getClass().getDeclaredFields();
+//        for (int i = 0; i < declaredFields.length; i++) {
+//            Field field1 = declaredFields[i];
+//            Field field2 = declaredFields2[i+1];
+//            field1.setAccessible(true);
+//            field2.setAccessible(true);
+//            if (Objects.nonNull(field1.get(wwww)) && !field1.get(wwww).equals(field2.get(resident))) {
+//                System.out.println(field2.get(resident));
+//            }
+//        }
+    }
+
+    private static void applyModifyProperties(Resident resident, ResidentModifyRequest modifyRequest) {
+        Map<String, Object> modifyMap = modifyRequest.getFieldAndValueMap();
+        Field[] declaredFields = resident.getClass().getDeclaredFields();
+        for (Field declaredField : declaredFields) {
+            try {
+                declaredField.setAccessible(true);
+                String key = declaredField.getName();
+                Object value = declaredField.get(resident);
+                if (Objects.nonNull(value) && modifyMap.containsKey(key)) {
+                    if (!modifyMap.get(key).equals(value)) {
+                        System.out.println(key + "    " + value);
+                        declaredField.set(resident, modifyMap.get(key));
+                    }
+                }
+            } catch (IllegalAccessException e) {
+                throw new ResidentModifyFailException(e);
+            }
+        }
     }
 
 

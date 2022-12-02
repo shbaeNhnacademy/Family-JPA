@@ -7,7 +7,11 @@ import lombok.*;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @NoArgsConstructor
 @Getter
@@ -66,4 +70,5 @@ public class Resident {
         this.deathPlace = deathPlace;
         this.deathPlaceAddress = deathPlaceAddress;
     }
+
 }

@@ -46,8 +46,8 @@
 <header>
     <a th:href="@{/}">주민 목록</a><br><br>
     <h2>가족관계증명서 </h2><br/>
-    <h5>발급일 : <span th:text="${#temporals.format(ctf.issueDate,'yyyy-MM-dd')}"></span></h5>
-    <h5>증명서 확인번호 : <span th:text="${ctf.confirmNumber}"></span></h5>
+    <h5>발급일 : <span th:text="${#temporals.format(ctf.issueDate,'yyyy-MM-dd')}"></span></h5><br/>
+    <h5>증명서 확인번호 : <span th:text="${ctf.confirmNumber}"></span></h5><br/>
     등록기준지(본적) : <span th:text="${base.registrationAddress}"></span><br/>
 </header>
 

@@ -15,7 +15,6 @@ import java.io.Serializable;
 public class FamilyRelationship {
     @EmbeddedId
     private Pk pk;
-
     @MapsId("baseSerialNumber")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "base_resident_serial_number")
@@ -37,5 +36,15 @@ public class FamilyRelationship {
 
         @Column(name = "family_resident_serial_number")
         private Integer familySerialNumber;
+    }
+
+    @Transient
+    private Resident familyMember;
+
+    public FamilyRelationship(Resident baseMember, Resident familyMember, Relationship relationship) {
+        this.baseMember = baseMember;
+        this.familyMember = familyMember;
+        this.relationship = relationship;
+        this.setPk(new Pk(baseMember.getSerialNumber(), familyMember.getSerialNumber()));
     }
 }

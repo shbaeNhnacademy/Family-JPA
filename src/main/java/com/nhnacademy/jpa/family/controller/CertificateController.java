@@ -55,7 +55,7 @@ public class CertificateController {
 
     private static void verifySerialNumber(int sn) {
         if (sn == 0) {
-            throw new ResidentNotFoundException();
+            throw new ResidentNotFoundException(sn);
         }
     }
 }

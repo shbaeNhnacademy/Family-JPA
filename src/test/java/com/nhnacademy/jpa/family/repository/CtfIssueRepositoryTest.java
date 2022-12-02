@@ -53,7 +53,7 @@ class CtfIssueRepositoryTest {
     @Test
     void save_insert() {
         Optional<Resident> byId = residentRepository.findById(4);
-        Resident resident = byId.orElseThrow(() -> new ResidentNotFoundException());
+        Resident resident = byId.orElseThrow(() -> new ResidentNotFoundException(4));
         CtfType 가족관계증명서 = CtfType.가족관계증명서;
         CtfIssue ctfIssue = new CtfIssue(resident, 가족관계증명서);
         Long latestConfirmNum = ctfIssueRepository.getLatestConfirmNumByCertificateType(가족관계증명서);
