@@ -1,7 +1,6 @@
 package com.nhnacademy.jpa.family.service;
 
-import com.nhnacademy.jpa.family.domain.relation.FamilyRelationDto;
-import com.nhnacademy.jpa.family.domain.ResidentModifyRequest;
+import com.nhnacademy.jpa.family.domain.relation.ResidentModifyRequest;
 import com.nhnacademy.jpa.family.domain.relation.FamilyRelationViewDto;
 import com.nhnacademy.jpa.family.entity.Resident;
 import org.springframework.data.domain.Page;

@@ -10,4 +10,5 @@ public interface HouseholdRepository extends HouseholdRepositoryCustom, JpaRepos
     SerialNumberOnly findFirstByOrderBySerialNumberDesc();
 
     Optional<Household> findHouseholdByHouseholder_SerialNumber(int residentSn);
+
 }

@@ -1,15 +1,15 @@
 package com.nhnacademy.jpa.family.controller.rest;
 
+import com.nhnacademy.jpa.family.Utils;
 import com.nhnacademy.jpa.family.domain.relation.RelationshipRequest;
-import com.nhnacademy.jpa.family.domain.ResidentModifyRequest;
-import com.nhnacademy.jpa.family.domain.ResidentRegisterRequest;
+import com.nhnacademy.jpa.family.domain.relation.ResidentModifyRequest;
+import com.nhnacademy.jpa.family.domain.relation.ResidentRegisterRequest;
 import com.nhnacademy.jpa.family.entity.FamilyRelationship;
 import com.nhnacademy.jpa.family.entity.Resident;
 import com.nhnacademy.jpa.family.entity.code.Relationship;
 import com.nhnacademy.jpa.family.exception.RelationshipNotFoundException;
 import com.nhnacademy.jpa.family.exception.ResidentModifyFailException;
 import com.nhnacademy.jpa.family.exception.ResidentNotFoundException;
-import com.nhnacademy.jpa.family.exception.ValidationFailedException;
 import com.nhnacademy.jpa.family.service.FamilyRelationshipService;
 import com.nhnacademy.jpa.family.service.ResidentService;
 import org.springframework.http.HttpStatus;
@@ -35,7 +35,7 @@ public class ResidentRestController {
     @PostMapping
     public ResponseEntity<ResidentRegisterRequest> registerResident(@Valid @RequestBody ResidentRegisterRequest residentRegisterRequest,
                                                                     BindingResult bindingResult) {
-        verifyValidation(bindingResult);
+        Utils.verifyValidation(bindingResult);
         Resident resident = residentService.insertResident(getNewResident(residentRegisterRequest));
         return ResponseEntity.created(URI.create("/residents/"+resident.getSerialNumber())).build();
     }
@@ -64,7 +64,7 @@ public class ResidentRestController {
     public ResponseEntity<RelationshipRequest> registerRelationship(@PathVariable("serialNumber") int baseSn,
                                                                     @Valid @RequestBody RelationshipRequest relationshipRequest,
                                                                     BindingResult bindingResult) {
-        verifyValidation(bindingResult);
+        Utils.verifyValidation(bindingResult);
         FamilyRelationship insertRelationship =
                 settingFamilyRelationship(baseSn, relationshipRequest.getFamilySerialNumber(), relationshipRequest);
         return ResponseEntity
@@ -78,7 +78,7 @@ public class ResidentRestController {
                                    @PathVariable("familySerialNumber") int familySn,
                                    @Valid @RequestBody RelationshipRequest relationshipRequest,
                                    BindingResult bindingResult) {
-        verifyValidation(bindingResult);
+        Utils.verifyValidation(bindingResult);
         settingFamilyRelationship(baseSn, familySn, relationshipRequest);
         return ResponseEntity.ok(relationshipRequest);
     }
@@ -114,11 +114,7 @@ public class ResidentRestController {
     }
 
 
-    private static void verifyValidation(BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new ValidationFailedException(bindingResult);
-        }
-    }
+
 
     @ExceptionHandler(ResidentNotFoundException.class)
     public ResponseEntity<String> handleResidentNotFoundException(ResidentNotFoundException ex) {
@@ -132,11 +128,6 @@ public class ResidentRestController {
 
     @ExceptionHandler(RelationshipNotFoundException.class)
     public ResponseEntity<String> handleRelationshipNotFoundException(RelationshipNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(ValidationFailedException.class)
-    public ResponseEntity<String> handleValidationFailedException(ValidationFailedException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
 

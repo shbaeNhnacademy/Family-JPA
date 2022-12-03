@@ -3,7 +3,7 @@ package com.nhnacademy.jpa.family.repository;
 import com.nhnacademy.jpa.family.config.RootConfig;
 import com.nhnacademy.jpa.family.config.WebConfig;
 import com.nhnacademy.jpa.family.domain.relation.FamilyRelationDto;
-import com.nhnacademy.jpa.family.domain.ResidentModifyRequest;
+import com.nhnacademy.jpa.family.domain.relation.ResidentModifyRequest;
 import com.nhnacademy.jpa.family.domain.SerialNumberOnly;
 import com.nhnacademy.jpa.family.entity.Resident;
 import com.nhnacademy.jpa.family.entity.code.BirthPlace;
@@ -107,19 +107,6 @@ class ResidentRepositoryTest {
         applyModifyProperties(resident, modifyRequest);
         System.out.println("resident = " + resident);
 
-
-
-//        Field[] declaredFields2 = resident.getClass().getDeclaredFields();
-//        Field[] declaredFields = wwww.getClass().getDeclaredFields();
-//        for (int i = 0; i < declaredFields.length; i++) {
-//            Field field1 = declaredFields[i];
-//            Field field2 = declaredFields2[i+1];
-//            field1.setAccessible(true);
-//            field2.setAccessible(true);
-//            if (Objects.nonNull(field1.get(wwww)) && !field1.get(wwww).equals(field2.get(resident))) {
-//                System.out.println(field2.get(resident));
-//            }
-//        }
     }
 
     private static void applyModifyProperties(Resident resident, ResidentModifyRequest modifyRequest) {

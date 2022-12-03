@@ -6,9 +6,11 @@ import com.nhnacademy.jpa.family.repository.FamilyRelationshipRepository;
 import com.nhnacademy.jpa.family.service.FamilyRelationshipService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class FamilyRelationshipServiceImpl implements FamilyRelationshipService {
     private final FamilyRelationshipRepository familyRelationshipRepository;
 

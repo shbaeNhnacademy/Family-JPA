@@ -2,7 +2,7 @@ package com.nhnacademy.jpa.family.service.impl;
 
 import com.nhnacademy.jpa.family.Utils;
 import com.nhnacademy.jpa.family.domain.relation.FamilyRelationDto;
-import com.nhnacademy.jpa.family.domain.ResidentModifyRequest;
+import com.nhnacademy.jpa.family.domain.relation.ResidentModifyRequest;
 import com.nhnacademy.jpa.family.domain.relation.FamilyRelationViewDto;
 import com.nhnacademy.jpa.family.entity.Resident;
 import com.nhnacademy.jpa.family.exception.ResidentNotFoundException;

@@ -5,27 +5,47 @@ import com.nhnacademy.jpa.family.domain.household.HouseholderDto;
 import com.nhnacademy.jpa.family.domain.household.HouseholderViewDto;
 import com.nhnacademy.jpa.family.domain.household.HouseholderViewDto.HouseholderAddress;
 import com.nhnacademy.jpa.family.entity.Household;
+import com.nhnacademy.jpa.family.entity.HouseholdMovementAddress;
+import com.nhnacademy.jpa.family.exception.AddressNotFoundException;
 import com.nhnacademy.jpa.family.exception.HouseholdNotFoundException;
+import com.nhnacademy.jpa.family.repository.household.HouseholdMovementAddressRepository;
 import com.nhnacademy.jpa.family.repository.household.HouseholdRepository;
 import com.nhnacademy.jpa.family.service.HouseholdService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class HouseholdServiceImpl implements HouseholdService {
     private final HouseholdRepository householdRepository;
+    private final HouseholdMovementAddressRepository movementAddressRepository;
 
-    public HouseholdServiceImpl(HouseholdRepository householdRepository) {
+    public HouseholdServiceImpl(HouseholdRepository householdRepository, HouseholdMovementAddressRepository movementAddressRepository) {
         this.householdRepository = householdRepository;
+        this.movementAddressRepository = movementAddressRepository;
     }
 
     @Override
-    public Household findHouseholdBySerialNumber(int residentSn) {
+    public Household getHouseholdById(int householdSn) {
+        Optional<Household> byId = householdRepository.findById(householdSn);
+        return byId.orElseThrow(() -> new HouseholdNotFoundException());
+    }
+
+    @Override
+    public Household getHouseholdBySerialNumber(int residentSn) {
         Optional<Household> byId = householdRepository.findHouseholdByHouseholder_SerialNumber(residentSn);
         return byId.orElseThrow(() -> new HouseholdNotFoundException());
+    }
+
+    @Override
+    public HouseholdMovementAddress getMovementByPk(HouseholdMovementAddress.Pk pk) {
+        Optional<HouseholdMovementAddress> byId = movementAddressRepository.findById(pk);
+        HouseholdMovementAddress householdMovementAddress = byId.orElseThrow(() -> new AddressNotFoundException());
+        return householdMovementAddress;
     }
 
     @Override
@@ -52,4 +72,30 @@ public class HouseholdServiceImpl implements HouseholdService {
     public List<HouseholdCompositionDto> getCompositionInfoByHouseholdSerialNumber(int householdSn) {
         return householdRepository.getCompositionDtoByHouseholdSerialNumber(householdSn);
     }
+
+    @Override
+    public Integer getLatestSerialNumber() {
+        return householdRepository.findFirstByOrderBySerialNumberDesc().getSerialNumber();
+    }
+
+    @Override
+    public Household insertHousehold(Household household) {
+        return householdRepository.save(household);
+    }
+
+    @Override
+    public void deleteHousehold(Household household) {
+        householdRepository.delete(household);
+    }
+
+    @Override
+    public HouseholdMovementAddress saveMovement(HouseholdMovementAddress movementAddress) {
+        return movementAddressRepository.save(movementAddress);
+    }
+
+    @Override
+    public void deleteHouseholdMovementAddress(HouseholdMovementAddress movementAddress) {
+        movementAddressRepository.delete(movementAddress);
+    }
+
 }

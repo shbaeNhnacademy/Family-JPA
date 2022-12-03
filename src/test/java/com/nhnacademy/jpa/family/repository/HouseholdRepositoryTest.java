@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -90,5 +91,8 @@ class HouseholdRepositoryTest {
                 .filter(it -> it.getRelationship().equals(Relationship.본인))
                 .anyMatch(it -> it.getName().equals("남기준"));
         assertThat(is남기준).isTrue();
+
     }
+
+
 }

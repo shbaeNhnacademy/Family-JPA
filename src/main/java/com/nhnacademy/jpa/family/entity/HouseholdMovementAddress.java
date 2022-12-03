@@ -43,4 +43,11 @@ public class HouseholdMovementAddress {
         @Column(name = "house_movement_report_date")
         private LocalDate movementReportDate;
     }
+
+    public HouseholdMovementAddress(LocalDate movementReportDate, Household household, String movementAddress, String yesOrNo) {
+        this.household = household;
+        this.movementAddress = movementAddress;
+        this.yesOrNo = yesOrNo;
+        this.setPk(new Pk(household.getSerialNumber(), movementReportDate));
+    }
 }

@@ -1,4 +1,4 @@
-package com.nhnacademy.jpa.family.domain;
+package com.nhnacademy.jpa.family.domain.relation;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;

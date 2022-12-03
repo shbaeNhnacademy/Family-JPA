@@ -2,7 +2,6 @@ package com.nhnacademy.jpa.family.controller;
 
 import com.nhnacademy.jpa.family.domain.household.HouseholdCompositionDto;
 import com.nhnacademy.jpa.family.domain.household.HouseholderViewDto;
-import com.nhnacademy.jpa.family.domain.relation.FamilyRelationDto;
 import com.nhnacademy.jpa.family.domain.relation.FamilyRelationViewDto;
 import com.nhnacademy.jpa.family.entity.CtfIssue;
 import com.nhnacademy.jpa.family.entity.Household;
@@ -66,7 +65,7 @@ public class CertificateController {
         model.addAttribute("ctf", issue);
 
         Household household =
-                householdService.findHouseholdBySerialNumber(residentSn);
+                householdService.getHouseholdBySerialNumber(residentSn);
         HouseholderViewDto viewDto =
                 householdService.getHouseHolderInfoBySerialNumber(residentSn);
         List<HouseholdCompositionDto> compositions =
