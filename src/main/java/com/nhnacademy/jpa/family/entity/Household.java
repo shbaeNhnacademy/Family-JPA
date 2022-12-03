@@ -10,12 +10,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Entity
 @Table(name = "household")
 public class Household {
     @Id
     @Column(name = "household_serial_number")
-    private Integer householdId;
+    private Integer serialNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "household_resident_serial_number")
@@ -31,4 +32,11 @@ public class Household {
     @Column(name = "current_house_movement_address")
     private String currentMovementAddress;
 
+    public Household(Integer latersSerialNumber, Resident householder, LocalDate compositionDate, CompositionReason reason, String currentMovementAddress) {
+        this.serialNumber = latersSerialNumber + 1;
+        this.householder = householder;
+        this.compositionDate = compositionDate;
+        this.reason = reason;
+        this.currentMovementAddress = currentMovementAddress;
+    }
 }

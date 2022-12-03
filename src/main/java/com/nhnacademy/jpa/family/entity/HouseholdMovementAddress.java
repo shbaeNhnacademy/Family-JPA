@@ -9,11 +9,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Entity
 @Table(name = "household_movement_address")
 public class HouseholdMovementAddress {
-    public static final String LAST_YES = "y";
-    public static final String LAST_NO = "n";
+    public static final String LAST_YES = "Y";
+    public static final String LAST_NO = "N";
 
     @EmbeddedId
     private Pk pk;
