@@ -2,8 +2,8 @@ package com.nhnacademy.jpa.family.repository;
 
 import com.nhnacademy.jpa.family.config.RootConfig;
 import com.nhnacademy.jpa.family.config.WebConfig;
-import com.nhnacademy.jpa.family.domain.HouseholdCompositionDto;
-import com.nhnacademy.jpa.family.domain.HouseholderDto;
+import com.nhnacademy.jpa.family.domain.household.HouseholdCompositionDto;
+import com.nhnacademy.jpa.family.domain.household.HouseholderDto;
 import com.nhnacademy.jpa.family.domain.SerialNumberOnly;
 import com.nhnacademy.jpa.family.entity.Household;
 import com.nhnacademy.jpa.family.entity.HouseholdMovementAddress;
@@ -46,6 +46,14 @@ class HouseholdRepositoryTest {
         assertThat(household.getCurrentMovementAddress()).isNotBlank();
 
         System.out.println("household = " + household);
+    }
+
+    @Test
+    void findHouseholdByHouseholder_SerialNumber() {
+        int residentSn = 4;
+        Optional<Household> optionalHousehold = householdRepository.findHouseholdByHouseholder_SerialNumber(residentSn);
+        Household household = optionalHousehold.orElseThrow(() -> new HouseholdNotFoundException());
+        assertThat(household.getHouseholder().getSerialNumber()).isEqualTo(residentSn);
     }
 
     @Test

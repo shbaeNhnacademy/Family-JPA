@@ -1,12 +1,16 @@
 package com.nhnacademy.jpa.family.controller;
 
-import com.nhnacademy.jpa.family.domain.FamilyRelationDto;
+import com.nhnacademy.jpa.family.domain.household.HouseholdCompositionDto;
+import com.nhnacademy.jpa.family.domain.household.HouseholderViewDto;
+import com.nhnacademy.jpa.family.domain.relation.FamilyRelationDto;
+import com.nhnacademy.jpa.family.domain.relation.FamilyRelationViewDto;
 import com.nhnacademy.jpa.family.entity.CtfIssue;
+import com.nhnacademy.jpa.family.entity.Household;
 import com.nhnacademy.jpa.family.entity.Resident;
 import com.nhnacademy.jpa.family.entity.code.CtfType;
 import com.nhnacademy.jpa.family.exception.ResidentNotFoundException;
-import com.nhnacademy.jpa.family.repository.certificate.CtfIssueRepository;
 import com.nhnacademy.jpa.family.service.CtfService;
+import com.nhnacademy.jpa.family.service.HouseholdService;
 import com.nhnacademy.jpa.family.service.ResidentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +25,13 @@ import java.util.List;
 public class CertificateController {
     private final ResidentService residentService;
 
+    private final HouseholdService householdService;
+
     private final CtfService ctfService;
 
-    public CertificateController(ResidentService residentService, CtfService ctfService) {
+    public CertificateController(ResidentService residentService, HouseholdService householdService, CtfService ctfService) {
         this.residentService = residentService;
+        this.householdService = householdService;
         this.ctfService = ctfService;
     }
 
@@ -40,28 +47,34 @@ public class CertificateController {
 
         model.addAttribute("ctf", issue);
 
-        List<FamilyRelationDto> members = residentService.getFamilyMemberFromBase(base.getSerialNumber());
+        List<FamilyRelationViewDto> members = residentService.getFamilyMemberFromBase(base.getSerialNumber());
         model.addAttribute("base", base);
         model.addAttribute("members", members);
-        return "/ctf/certificateView";
+        return "/ctf/relationView";
     }
 
     @GetMapping("/registration/{serialNum}")
     public String viewRegistrationCtf(@PathVariable("serialNum") int sn,
                                   Model model) {
         verifySerialNumber(sn);
-        //TODO 아래 지우고 등본용으로 만들어얌
         Resident householder = residentService.getResidentBySn(sn);
+        Integer residentSn = householder.getSerialNumber();
 
         CtfType 주민등록등본 = CtfType.주민등록등본;
         CtfIssue issue = ctfService.insertCtfIssue(getCtfIssue(householder, 주민등록등본));
 
         model.addAttribute("ctf", issue);
 
-//        List<FamilyRelationDto> members = residentService.getFamilyMemberFromBase(base.getSerialNumber());
-//        model.addAttribute("base", base);
-//        model.addAttribute("members", members);
-        return "/ctf/certificateView";
+        Household household =
+                householdService.findHouseholdBySerialNumber(residentSn);
+        HouseholderViewDto viewDto =
+                householdService.getHouseHolderInfoBySerialNumber(residentSn);
+        List<HouseholdCompositionDto> compositions =
+                householdService.getCompositionInfoByHouseholdSerialNumber(household.getSerialNumber());
+
+        model.addAttribute("viewDto", viewDto);
+        model.addAttribute("compositions", compositions);
+        return "/ctf/registrationView";
     }
 
     private CtfIssue getCtfIssue(Resident base, CtfType 가족관계증명서) {

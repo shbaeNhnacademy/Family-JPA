@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<style>
+    * {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    body{
+        width: 100%;
+        height: 100%;
+    }
+    header{
+        width: 100%;
+        height: 5%;
+        padding: 10px;
+    }
+    .address{
+        width: 100%;
+        height: 50%;
+        display: flex;
+        align-items: end;
+        justify-content: center;
+    }
+    main{
+        width: 100%;
+        height: 60%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    table,th,td{
+        border: 1px solid black;
+        font-size: 13pt;
+    }
+
+    .table{
+        width: 80%;
+        height: 30%;
+        table-layout: fixed;
+        text-align: center;
+        overflow: hidden;
+    }
+    .tableHead{
+        height: 30px;
+    }
+
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>주민등록등본 출력 페이지</title>
+</head>
+<body>
+<header>
+    <a th:href="@{/}">주민 목록</a><br><br>
+    <h2>주민등록등본 </h2><br/>
+    <h5>발급일 : <span th:text="${#temporals.format(ctf.issueDate,'yyyy-MM-dd')}"></span></h5><br>
+    <h5>증명서 확인번호 : <span th:text="${ctf.confirmNumber}"></span></h5><br>
+    세대주 성명 : <span th:text="${viewDto.householderName}"></span><br>
+    세대구성 사유 : <span th:text="${viewDto.reason}"></span><br>
+    세대구성 일자 : <span th:text="${viewDto.compositionDate}"></span><br>
+
+</header>
+<div class="address">
+    <table class="table">
+        <th class="tableHead" >주소 구분</th>
+        <th class="tableHead" >주소 명</th>
+        <th class="tableHead" >신고일</th>
+        <tr th:each="address : ${viewDto.addresses}">
+            <td th:text="${address.getPresentStatus()}"></td>
+            <td th:text="${address.getAddress()}"></td>
+            <td th:text="${#temporals.format(address.getReportDate(),'yyyy-MM-dd')}"></td>
+        </tr>
+    </table>
+</div>
+<main>
+    <table class="table">
+        <th class="tableHead" >세대주 관계</th>
+        <th class="tableHead" >성명</th>
+        <th class="tableHead" >주민등록번호</th>
+        <th class="tableHead" >신고일</th>
+        <th class="tableHead" >변동사유</th>
+        <tr th:each="composition : ${compositions}">
+            <td th:text="${composition.getRelationship()}"></td>
+            <td th:text="${composition.getName()}"></td>
+            <td th:text="${composition.getRegistrationNumber()}"></td>
+            <td th:text="${#temporals.format(composition.getReportDate(),'yyyy년 MM월 dd일')}"></td>
+            <td th:text="${composition.getReason()}"></td>
+        </tr>
+    </table>
+</main>
+
+
+
+
+</body>
+</html>

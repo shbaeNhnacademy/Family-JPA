@@ -1,6 +1,6 @@
 package com.nhnacademy.jpa.family.controller.rest;
 
-import com.nhnacademy.jpa.family.domain.RelationshipRequest;
+import com.nhnacademy.jpa.family.domain.relation.RelationshipRequest;
 import com.nhnacademy.jpa.family.domain.ResidentModifyRequest;
 import com.nhnacademy.jpa.family.domain.ResidentRegisterRequest;
 import com.nhnacademy.jpa.family.entity.FamilyRelationship;

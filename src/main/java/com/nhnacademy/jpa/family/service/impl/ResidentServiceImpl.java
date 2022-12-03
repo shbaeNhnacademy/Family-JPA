@@ -1,7 +1,9 @@
 package com.nhnacademy.jpa.family.service.impl;
 
-import com.nhnacademy.jpa.family.domain.FamilyRelationDto;
+import com.nhnacademy.jpa.family.Utils;
+import com.nhnacademy.jpa.family.domain.relation.FamilyRelationDto;
 import com.nhnacademy.jpa.family.domain.ResidentModifyRequest;
+import com.nhnacademy.jpa.family.domain.relation.FamilyRelationViewDto;
 import com.nhnacademy.jpa.family.entity.Resident;
 import com.nhnacademy.jpa.family.exception.ResidentNotFoundException;
 import com.nhnacademy.jpa.family.repository.ResidentRepository;
@@ -12,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -49,8 +48,19 @@ public class ResidentServiceImpl implements ResidentService{
     }
 
     @Override
-    public List<FamilyRelationDto> getFamilyMemberFromBase(int baseMemberSn) {
-        return residentRepository.getResidentBySnFromFamilyRelationship(baseMemberSn);
+    public List<FamilyRelationViewDto> getFamilyMemberFromBase(int baseMemberSn) {
+        List<FamilyRelationDto> relationDtos = residentRepository.getResidentBySnFromFamilyRelationship(baseMemberSn);
+        List<FamilyRelationViewDto> viewDtos = new ArrayList<>(); // 마킹된 주민번호 노출하기 위해
+        for (FamilyRelationDto dto : relationDtos) {
+            String markedRegistrationNumber = Utils.getMarkedNumber(dto.getRegistrationNumber());
+            viewDtos.add(new FamilyRelationViewDto(
+                    dto.getRelationship(),
+                    dto.getName(),
+                    dto.getBirthDate(),
+                    markedRegistrationNumber,
+                    dto.getGender()));
+        }
+        return viewDtos;
     }
 
     @Override

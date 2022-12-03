@@ -1,5 +1,6 @@
-package com.nhnacademy.jpa.family.domain;
+package com.nhnacademy.jpa.family.domain.household;
 
+import com.nhnacademy.jpa.family.Utils;
 import com.nhnacademy.jpa.family.entity.code.CompositionReason;
 import com.nhnacademy.jpa.family.entity.code.Relationship;
 import com.querydsl.core.annotations.QueryProjection;
@@ -19,8 +20,10 @@ public class HouseholdCompositionDto {
     public HouseholdCompositionDto(Relationship relationship, String name, String registrationNumber, LocalDate reportDate, CompositionReason reason) {
         this.relationship = relationship;
         this.name = name;
-        this.registrationNumber = registrationNumber;
+        this.registrationNumber = Utils.getMarkedNumber(registrationNumber);
         this.reportDate = reportDate;
         this.reason = reason;
     }
+
+
 }

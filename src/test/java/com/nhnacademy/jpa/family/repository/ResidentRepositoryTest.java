@@ -2,7 +2,7 @@ package com.nhnacademy.jpa.family.repository;
 
 import com.nhnacademy.jpa.family.config.RootConfig;
 import com.nhnacademy.jpa.family.config.WebConfig;
-import com.nhnacademy.jpa.family.domain.FamilyRelationDto;
+import com.nhnacademy.jpa.family.domain.relation.FamilyRelationDto;
 import com.nhnacademy.jpa.family.domain.ResidentModifyRequest;
 import com.nhnacademy.jpa.family.domain.SerialNumberOnly;
 import com.nhnacademy.jpa.family.entity.Resident;

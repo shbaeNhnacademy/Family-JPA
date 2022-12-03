@@ -1,9 +1,9 @@
 package com.nhnacademy.jpa.family.repository.household;
 
-import com.nhnacademy.jpa.family.domain.HouseholdCompositionDto;
-import com.nhnacademy.jpa.family.domain.HouseholderDto;
-import com.nhnacademy.jpa.family.domain.QHouseholdCompositionDto;
-import com.nhnacademy.jpa.family.domain.QHouseholderDto;
+import com.nhnacademy.jpa.family.domain.household.HouseholdCompositionDto;
+import com.nhnacademy.jpa.family.domain.household.HouseholderDto;
+import com.nhnacademy.jpa.family.domain.household.QHouseholdCompositionDto;
+import com.nhnacademy.jpa.family.domain.household.QHouseholderDto;
 import com.nhnacademy.jpa.family.entity.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
@@ -16,16 +16,15 @@ public class HouseholdRepositoryImpl extends QuerydslRepositorySupport implement
     }
 
     @Override
-    public List<HouseholderDto> getHouseholderDtoBySerialNumber(int sn) {
+    public List<HouseholderDto> getHouseholderDtoBySerialNumber(int residentSn) {
         QHousehold household = QHousehold.household;
         QResident resident = QResident.resident;
         QHouseholdMovementAddress movementAddress = QHouseholdMovementAddress.householdMovementAddress;
-        QHouseholdMovementAddress_Pk pk = QHouseholdMovementAddress_Pk.pk;
 
         return from(household)
                 .innerJoin(household.householder, resident)
                 .leftJoin(movementAddress).on(household.serialNumber.eq(movementAddress.household.serialNumber))
-                .where(resident.serialNumber.eq(sn))
+                .where(resident.serialNumber.eq(residentSn))
                 .select(new QHouseholderDto(
                         resident.name,
                         household.reason,

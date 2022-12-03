@@ -1,4 +1,4 @@
-package com.nhnacademy.jpa.family.domain;
+package com.nhnacademy.jpa.family.domain.household;
 
 import com.nhnacademy.jpa.family.entity.code.CompositionReason;
 import com.querydsl.core.annotations.QueryProjection;

@@ -1,7 +1,8 @@
 package com.nhnacademy.jpa.family.service;
 
-import com.nhnacademy.jpa.family.domain.FamilyRelationDto;
+import com.nhnacademy.jpa.family.domain.relation.FamilyRelationDto;
 import com.nhnacademy.jpa.family.domain.ResidentModifyRequest;
+import com.nhnacademy.jpa.family.domain.relation.FamilyRelationViewDto;
 import com.nhnacademy.jpa.family.entity.Resident;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,7 @@ public interface ResidentService {
 
     Page<Resident> viewResidentsBy(Pageable pageable);
 
-    List<FamilyRelationDto> getFamilyMemberFromBase(int baseMemberSn);
+    List<FamilyRelationViewDto> getFamilyMemberFromBase(int baseMemberSn);
 
     Integer getLatestSerialNumber();
 

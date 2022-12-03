@@ -1,6 +1,6 @@
 package com.nhnacademy.jpa.family.repository;
 
-import com.nhnacademy.jpa.family.domain.FamilyRelationDto;
+import com.nhnacademy.jpa.family.domain.relation.FamilyRelationDto;
 import com.nhnacademy.jpa.family.domain.SerialNumberOnly;
 import com.nhnacademy.jpa.family.entity.Resident;
 import org.springframework.data.jpa.repository.JpaRepository;
