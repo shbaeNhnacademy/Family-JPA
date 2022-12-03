@@ -2,10 +2,12 @@ package com.nhnacademy.jpa.family.repository;
 
 import com.nhnacademy.jpa.family.config.RootConfig;
 import com.nhnacademy.jpa.family.config.WebConfig;
+import com.nhnacademy.jpa.family.domain.HouseholdCompositionDto;
 import com.nhnacademy.jpa.family.domain.HouseholderDto;
 import com.nhnacademy.jpa.family.domain.SerialNumberOnly;
 import com.nhnacademy.jpa.family.entity.Household;
 import com.nhnacademy.jpa.family.entity.HouseholdMovementAddress;
+import com.nhnacademy.jpa.family.entity.code.Relationship;
 import com.nhnacademy.jpa.family.exception.HouseholdNotFoundException;
 import com.nhnacademy.jpa.family.repository.household.HouseholdRepository;
 import org.junit.jupiter.api.Test;
@@ -55,7 +57,8 @@ class HouseholdRepositoryTest {
     @Test
     void getDtoBySerialNumber() {
         int sn = 4;
-        List<HouseholderDto> dtos = householdRepository.getDtoBySerialNumber(sn);
+        List<HouseholderDto> dtos = householdRepository.getHouseholderDtoBySerialNumber(sn);
+        System.out.println("dtos = " + dtos);
         assertThat(dtos.size()).isEqualTo(3);
 
         List<HouseholderDto> dtoHasLastAddress = dtos.stream()
@@ -66,5 +69,18 @@ class HouseholdRepositoryTest {
 
         assertThat(dtoHasLastAddress.size() > 0).isTrue();
 
+    }
+
+    @Test
+    void getCompositionDtoByHouseholdSerialNumber() {
+        int householdSn = 1;
+        List<HouseholdCompositionDto> dtos = householdRepository.getCompositionDtoByHouseholdSerialNumber(householdSn);
+        System.out.println("dtos = " + dtos);
+        assertThat(dtos.size()).isEqualTo(4);
+
+        boolean is남기준 = dtos.stream()
+                .filter(it -> it.getRelationship().equals(Relationship.본인))
+                .anyMatch(it -> it.getName().equals("남기준"));
+        assertThat(is남기준).isTrue();
     }
 }

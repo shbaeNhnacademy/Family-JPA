@@ -5,7 +5,8 @@ public enum Relationship {
     모("mother"),
     배우자("spouse"),
     본인(""),
-    자녀("child");
+    자녀("child"),
+    동거인("");
 
     private final String enName;
 

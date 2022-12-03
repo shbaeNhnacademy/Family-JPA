@@ -1,15 +1,13 @@
 package com.nhnacademy.jpa.family.repository.household;
 
+import com.nhnacademy.jpa.family.domain.HouseholdCompositionDto;
 import com.nhnacademy.jpa.family.domain.HouseholderDto;
+import com.nhnacademy.jpa.family.domain.QHouseholdCompositionDto;
 import com.nhnacademy.jpa.family.domain.QHouseholderDto;
 import com.nhnacademy.jpa.family.entity.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
-import java.util.Map;
-
-import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.group.GroupBy.list;
 
 public class HouseholdRepositoryImpl extends QuerydslRepositorySupport implements HouseholdRepositoryCustom{
 
@@ -18,7 +16,7 @@ public class HouseholdRepositoryImpl extends QuerydslRepositorySupport implement
     }
 
     @Override
-    public List<HouseholderDto> getDtoBySerialNumber(int sn) {
+    public List<HouseholderDto> getHouseholderDtoBySerialNumber(int sn) {
         QHousehold household = QHousehold.household;
         QResident resident = QResident.resident;
         QHouseholdMovementAddress movementAddress = QHouseholdMovementAddress.householdMovementAddress;
@@ -35,6 +33,24 @@ public class HouseholdRepositoryImpl extends QuerydslRepositorySupport implement
                         movementAddress.movementAddress,
                         movementAddress.yesOrNo,
                         movementAddress.pk.movementReportDate))
+                .fetch();
+    }
+
+    @Override
+    public List<HouseholdCompositionDto> getCompositionDtoByHouseholdSerialNumber(int householdSn) {
+        QResident resident = QResident.resident;
+        QHouseholdComposition householdComposition = QHouseholdComposition.householdComposition;
+
+        return from(householdComposition)
+                .innerJoin(resident).on(householdComposition.pk.memberSerialNumber.eq(resident.serialNumber))
+                .where(householdComposition.household.serialNumber.eq(householdSn))
+                .select(new QHouseholdCompositionDto(
+                        householdComposition.relationship,
+                        resident.name,
+                        resident.registrationNumber,
+                        householdComposition.reportDate,
+                        householdComposition.changeReason
+                ))
                 .fetch();
     }
 }

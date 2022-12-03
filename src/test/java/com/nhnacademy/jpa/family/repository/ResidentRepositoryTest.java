@@ -57,7 +57,7 @@ class ResidentRepositoryTest {
     @Test
     void findByAll() {
         List<Resident> all = residentRepository.findAll();
-        assertThat(all.size()).isEqualTo(7);
+        assertThat(all.size() > 0).isTrue();
         assertThat(all.get(1).getName()).isEqualTo("남석환");
         System.out.println("all = " + all);
     }
