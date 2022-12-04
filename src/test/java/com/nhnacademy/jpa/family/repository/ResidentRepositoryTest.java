@@ -42,7 +42,6 @@ class ResidentRepositoryTest {
         Optional<Resident> byId = residentRepository.findById(sn);
         Resident resident = byId.orElseThrow(() -> new ResidentNotFoundException(sn));
         assertThat(resident.getName()).isEqualTo("남길동");
-        System.out.println("resident = " + resident);
     }
 
     @Test
@@ -51,7 +50,6 @@ class ResidentRepositoryTest {
         Optional<Resident> byId = residentRepository.findByName(name);
         Resident resident = byId.orElseThrow(() -> new ResidentNotFoundException(name));
         assertThat(resident.getName()).isEqualTo(name);
-        System.out.println("resident = " + resident);
     }
 
     @Test
@@ -59,7 +57,6 @@ class ResidentRepositoryTest {
         List<Resident> all = residentRepository.findAll();
         assertThat(all.size() > 0).isTrue();
         assertThat(all.get(1).getName()).isEqualTo("남석환");
-        System.out.println("all = " + all);
     }
 
     @Test
@@ -68,9 +65,6 @@ class ResidentRepositoryTest {
         List<FamilyRelationDto> residents = residentRepository.getResidentBySnFromFamilyRelationship(sn);
         assertThat(residents.size()).isEqualTo(4);
 
-        for (FamilyRelationDto resident : residents) {
-            System.out.println("resident = " + resident.getRelationship());
-        }
     }
 
     @Test
@@ -85,7 +79,6 @@ class ResidentRepositoryTest {
                 BirthPlace.병원, "" +
                 "경남 창원시 마산회원구 중리상곡로 114");
         Resident save = residentRepository.save(resident);
-        System.out.println("save = " + save);
         assertThat(save.getGender()).isEqualTo(Gender.남);
         assertThat(save.getRegistrationNumber()).isEqualTo(registrationNumber);
     }
@@ -93,7 +86,7 @@ class ResidentRepositoryTest {
     @Test
     void findFirstByOrderBySerialNumberDesc() {
         SerialNumberOnly numberDesc = residentRepository.findFirstByOrderBySerialNumberDesc();
-        System.out.println("numberDesc = " + numberDesc.getSerialNumber());
+        assertThat(numberDesc.getSerialNumber() > 0).isTrue();
     }
 
     @Test
@@ -105,7 +98,6 @@ class ResidentRepositoryTest {
                 .gender(Gender.여)
                 .build();
         applyModifyProperties(resident, modifyRequest);
-        System.out.println("resident = " + resident);
 
     }
 
@@ -119,7 +111,6 @@ class ResidentRepositoryTest {
                 Object value = declaredField.get(resident);
                 if (Objects.nonNull(value) && modifyMap.containsKey(key)) {
                     if (!modifyMap.get(key).equals(value)) {
-                        System.out.println(key + "    " + value);
                         declaredField.set(resident, modifyMap.get(key));
                     }
                 }

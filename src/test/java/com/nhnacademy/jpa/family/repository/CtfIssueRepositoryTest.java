@@ -73,7 +73,6 @@ class CtfIssueRepositoryTest {
         int residentSn = 4;
         List<CtfIssue> ctfIssues = ctfIssueRepository.findCtfIssueByIssuer_SerialNumber(residentSn);
         assertThat(ctfIssues.size() > 0).isTrue();
-        System.out.println("issue = " + ctfIssues);
     }
 
     @Test

@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/")
 public class ResidentController {
@@ -37,7 +35,7 @@ public class ResidentController {
     @PostMapping("/{serialNumber}/delete")
     public String deleteResident() {
         //TODO 삭제 코드 구현 필요
-        return "";
+        return "redirect:/";
     }
 
 

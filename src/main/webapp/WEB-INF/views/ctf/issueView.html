@@ -53,7 +53,7 @@
 </header>
 <div class="buttons">
     <span th:each="num : ${#numbers.sequence(1,page.getTotalPages())}">
-         <a th:text="${num}" th:href="@{/ctf/issue/{sn}(sn=${serialNum},page=${num - 1},size=${pageSize})}"></a> &nbsp;
+         <a th:if="${num != 0}" th:text="${num}" th:href="@{/ctf/issue/{sn}(sn=${serialNum},page=${num - 1},size=${pageSize})}"></a> &nbsp;
     </span>
 </div>
 <main>

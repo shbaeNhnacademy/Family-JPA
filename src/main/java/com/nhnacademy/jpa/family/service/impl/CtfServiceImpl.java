@@ -1,7 +1,6 @@
 package com.nhnacademy.jpa.family.service.impl;
 
 import com.nhnacademy.jpa.family.entity.CtfIssue;
-import com.nhnacademy.jpa.family.entity.Resident;
 import com.nhnacademy.jpa.family.entity.code.CtfType;
 import com.nhnacademy.jpa.family.exception.CertificateNotFoundException;
 import com.nhnacademy.jpa.family.repository.certificate.CtfIssueRepository;

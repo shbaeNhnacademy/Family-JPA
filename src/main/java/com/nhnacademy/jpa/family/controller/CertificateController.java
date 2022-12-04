@@ -152,7 +152,6 @@ public class CertificateController {
     public String viewIssueList(Pageable pageable,
                                 @PathVariable("serialNum") int sn,
                                 Model model) {
-        //TODO 발급목록 구현필요
         if (pageable.getPageSize() > WebConfig.PAGE_SIZE) {
             return "redirect:/ctf/issue/" + sn + "?page=0&size=" + WebConfig.PAGE_SIZE;
         }

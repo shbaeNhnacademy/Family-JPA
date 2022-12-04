@@ -2,9 +2,9 @@ package com.nhnacademy.jpa.family.repository;
 
 import com.nhnacademy.jpa.family.config.RootConfig;
 import com.nhnacademy.jpa.family.config.WebConfig;
+import com.nhnacademy.jpa.family.domain.SerialNumberOnly;
 import com.nhnacademy.jpa.family.domain.household.HouseholdCompositionDto;
 import com.nhnacademy.jpa.family.domain.household.HouseholderDto;
-import com.nhnacademy.jpa.family.domain.SerialNumberOnly;
 import com.nhnacademy.jpa.family.entity.Household;
 import com.nhnacademy.jpa.family.entity.HouseholdMovementAddress;
 import com.nhnacademy.jpa.family.entity.code.Relationship;
@@ -19,7 +19,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,7 +45,6 @@ class HouseholdRepositoryTest {
         assertThat(household.getSerialNumber()).isEqualTo(id);
         assertThat(household.getCurrentMovementAddress()).isNotBlank();
 
-        System.out.println("household = " + household);
     }
 
     @Test
@@ -60,19 +58,17 @@ class HouseholdRepositoryTest {
     @Test
     void findFirstByOrderBySerialNumberDesc() {
         SerialNumberOnly first = householdRepository.findFirstByOrderBySerialNumberDesc();
-        System.out.println("first = " + first.getSerialNumber());
+        assertThat(first.getSerialNumber() > 0).isTrue();
     }
 
     @Test
     void getDtoBySerialNumber() {
         int sn = 4;
         List<HouseholderDto> dtos = householdRepository.getHouseholderDtoBySerialNumber(sn);
-        System.out.println("dtos = " + dtos);
         assertThat(dtos.size()).isEqualTo(3);
 
         List<HouseholderDto> dtoHasLastAddress = dtos.stream()
                 .filter(it -> it.getYesOrNo().equals(HouseholdMovementAddress.LAST_YES))
-                .peek(System.out::println)
                 .filter(it -> it.getMovementAddress().contains("경기도"))
                 .collect(Collectors.toList());
 
@@ -84,7 +80,6 @@ class HouseholdRepositoryTest {
     void getCompositionDtoByHouseholdSerialNumber() {
         int householdSn = 1;
         List<HouseholdCompositionDto> dtos = householdRepository.getCompositionDtoByHouseholdSerialNumber(householdSn);
-        System.out.println("dtos = " + dtos);
         assertThat(dtos.size()).isEqualTo(4);
 
         boolean is남기준 = dtos.stream()

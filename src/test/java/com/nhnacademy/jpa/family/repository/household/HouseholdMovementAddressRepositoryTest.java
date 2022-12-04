@@ -33,6 +33,5 @@ class HouseholdMovementAddressRepositoryTest {
         HouseholdMovementAddress.Pk pk = new HouseholdMovementAddress.Pk(2, LocalDate.now());
         Optional<HouseholdMovementAddress> byId = addressRepository.findById(pk);
         HouseholdMovementAddress householdMovementAddress = byId.orElse(new HouseholdMovementAddress());
-        System.out.println("householdMovementAddress = " + householdMovementAddress);
     }
 }

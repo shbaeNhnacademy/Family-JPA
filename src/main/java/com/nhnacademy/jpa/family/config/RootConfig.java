@@ -1,6 +1,5 @@
 package com.nhnacademy.jpa.family.config;
 
-import com.fasterxml.jackson.databind.util.Converter;
 import com.nhnacademy.jpa.family.Base;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
@@ -9,8 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 
 import javax.sql.DataSource;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Configuration
 @ComponentScan(basePackageClasses = Base.class,
