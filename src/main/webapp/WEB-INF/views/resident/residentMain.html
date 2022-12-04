@@ -59,10 +59,10 @@
 
     <div class="buttons">
         <div class="button" th:if="${!page.isFirst()}">
-            <button type="button" th:onclick="|location.href='@{/(page=${page.getNumber()-1},size=${3})}'|">이전</button>
+            <button type="button" th:onclick="|location.href='@{/(page=${page.getNumber()-1},size=${pageSize})}'|">이전</button>
         </div>
         <div class="button" th:if="${!page.isLast()}">
-            <button  type="button" th:onclick="|location.href='@{/(page=${page.getNumber()+1},size=${3})}'|">다음</button>
+            <button  type="button" th:onclick="|location.href='@{/(page=${page.getNumber()+1},size=${pageSize})}'|">다음</button>
         </div>
     </div>
 
@@ -76,6 +76,7 @@
             <th class="tableHead" >출생신고서</th>
             <th class="tableHead" >사망신고서</th>
             <th class="tableHead" >증명서 발급 목록</th>
+            <th class="tableHead" >삭제</th>
 
             <tr th:each="resident : ${residents}">
                 <td th:text="${resident.serialNumber}"></td>
@@ -101,6 +102,11 @@
                 <td>
                     <!--       증명서 발급 목록 링크             -->
                     <a th:href="@{/ctf/issue/{sn}(sn=${resident.serialNumber})}">목록으로 가기</a>
+                </td>
+                <td>
+                    <form method="post" th:action="@{/{id}/delete(id=${resident.serialNumber})}">
+                        <input type="submit" value="삭제">
+                    </form>
                 </td>
             </tr>
         </table>

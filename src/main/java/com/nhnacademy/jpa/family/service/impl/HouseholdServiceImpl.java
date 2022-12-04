@@ -8,6 +8,7 @@ import com.nhnacademy.jpa.family.entity.Household;
 import com.nhnacademy.jpa.family.entity.HouseholdMovementAddress;
 import com.nhnacademy.jpa.family.exception.AddressNotFoundException;
 import com.nhnacademy.jpa.family.exception.HouseholdNotFoundException;
+import com.nhnacademy.jpa.family.repository.household.HouseholdCompositionRepository;
 import com.nhnacademy.jpa.family.repository.household.HouseholdMovementAddressRepository;
 import com.nhnacademy.jpa.family.repository.household.HouseholdRepository;
 import com.nhnacademy.jpa.family.service.HouseholdService;
@@ -23,10 +24,12 @@ import java.util.Optional;
 public class HouseholdServiceImpl implements HouseholdService {
     private final HouseholdRepository householdRepository;
     private final HouseholdMovementAddressRepository movementAddressRepository;
+    private final HouseholdCompositionRepository compositionRepository;
 
-    public HouseholdServiceImpl(HouseholdRepository householdRepository, HouseholdMovementAddressRepository movementAddressRepository) {
+    public HouseholdServiceImpl(HouseholdRepository householdRepository, HouseholdMovementAddressRepository movementAddressRepository, HouseholdCompositionRepository compositionRepository) {
         this.householdRepository = householdRepository;
         this.movementAddressRepository = movementAddressRepository;
+        this.compositionRepository = compositionRepository;
     }
 
     @Override
@@ -76,6 +79,11 @@ public class HouseholdServiceImpl implements HouseholdService {
     @Override
     public Integer getLatestSerialNumber() {
         return householdRepository.findFirstByOrderBySerialNumberDesc().getSerialNumber();
+    }
+
+    @Override
+    public Integer getHouseholderSnByMemberSn(int memberSn) {
+        return compositionRepository.getHouseholderSnByMemberSn(memberSn);
     }
 
     @Override

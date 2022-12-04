@@ -3,15 +3,13 @@ package com.nhnacademy.jpa.family.entity;
 import com.nhnacademy.jpa.family.entity.code.BirthPlace;
 import com.nhnacademy.jpa.family.entity.code.DeathPlace;
 import com.nhnacademy.jpa.family.entity.code.Gender;
-import lombok.*;
-import org.springframework.lang.Nullable;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 @NoArgsConstructor
 @Getter

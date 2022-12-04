@@ -19,6 +19,8 @@ public interface HouseholdService {
 
     Integer getLatestSerialNumber();
 
+    Integer getHouseholderSnByMemberSn(int memberSn);
+
     Household insertHousehold(Household household);
 
     void deleteHousehold(Household household);

@@ -32,7 +32,7 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 @ComponentScan(basePackageClasses = ControllerBase.class)
 public class WebConfig implements WebMvcConfigurer, ApplicationContextAware, MessageSourceAware {
-    public static final int PAGE_SIZE = 3;
+    public static final int PAGE_SIZE = 5;
     private ApplicationContext applicationContext;
     private MessageSource messageSource;
 

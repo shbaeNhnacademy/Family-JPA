@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<style>
+    * {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    header{
+        width: 100%;
+        height: 15%;
+        padding: 10px;
+    }
+    .buttons{
+        width: 100%;
+        height: 10%;
+    }
+    main{
+        width: 100%;
+        height: 70%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    table,th,td{
+        border: 1px solid black;
+        font-size: 13pt;
+    }
+
+    .table{
+        width: 80%;
+        height: 30%;
+        table-layout: fixed;
+        text-align: center;
+        overflow: hidden;
+    }
+    .tableHead{
+        height: 30px;
+    }
+
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>증명서 발급 목록 페이지</title>
+</head>
+<body>
+<header>
+    <a th:href="@{/}">주민 목록</a><br><br>
+    <h2>증명서 발급 목록</h2><br/>
+</header>
+<div class="buttons">
+    <span th:each="num : ${#numbers.sequence(1,page.getTotalPages())}">
+         <a th:text="${num}" th:href="@{/ctf/issue/{sn}(sn=${serialNum},page=${num - 1},size=${pageSize})}"></a> &nbsp;
+    </span>
+</div>
+<main>
+    <table class="table">
+        <th class="tableHead" >증명서 번호</th>
+        <th class="tableHead" >발급자</th>
+        <th class="tableHead" >증명서 종류</th>
+        <th class="tableHead" >발급일자</th>
+        <tr th:each="issue : ${issues}">
+            <td th:text="${issue.confirmNumber}"></td>
+            <td th:text="${issue.issuer.name}"></td>
+            <td th:text="${issue.type}"></td>
+            <td th:text="${#temporals.format(issue.issueDate,'yyyy년 MM월 dd일')}"></td>
+        </tr>
+    </table>
+</main>
+
+
+
+
+</body>
+</html>
