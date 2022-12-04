@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>출생신고서 페이지</title>
+</head>
+<body>
+<a th:href="@{/}">주민 목록</a><br><br>
+<h2>출생신고서</h2><br/>
+<h5>(신고일 : <span th:text="${#temporals.format(reporter.reportDate,'yyyy년 MM월 dd일')}"></span>)</h5><br>
+<hr/>
+출생자 성명 : <span th:text="${target.name}"></span><br/>
+출생자 성별 : <span th:text="${target.gender}"></span><br/>
+출생자 출생일시 : <span th:text="${#temporals.format(target.birthDate,'yyyy년 MM월 dd일 HH시 mm분')}"></span>
+    <span>(한국시각 : 24시각제로 기재)</span><br/>
+출생자 출생장소 : <span th:text="${target.birthPlace}"></span><br/>
+출생자 등록기준지(본적) : <span th:text="${target.address}"></span><br/>
+<br/><br/>
+
+출생자 부 성명 : <span th:text="${father.name}"></span>&nbsp;&nbsp;
+주민등록번호  : <span th:text="${father.registrationNumber}"></span><br/>
+
+출생자 모 성명 : <span th:text="${mother.name}"></span>&nbsp;&nbsp;
+주민등록번호  : <span th:text="${mother.registrationNumber}"></span><br/>
+
+<br/><br/>
+신고자 성명 : <span th:text="${reporter.name}"></span><br/>
+신고자 주민등록번호 : <span th:text="${reporter.registrationNumber}"></span><br/>
+신고자 자격 : <span th:text="${reporter.relationship}"></span><br/>
+신고자 이메일 : <span th:text="${reporter.email}"></span><br/>
+신고자 전화번호 : <span th:text="${reporter.phone}"></span><br/>
+
+</body>
+</html>

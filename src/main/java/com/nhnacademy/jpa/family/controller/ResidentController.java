@@ -39,4 +39,6 @@ public class ResidentController {
         //TODO 삭제 코드 구현 필요
         return "";
     }
+
+
 }

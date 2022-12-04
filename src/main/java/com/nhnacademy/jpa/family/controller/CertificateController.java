@@ -1,16 +1,22 @@
 package com.nhnacademy.jpa.family.controller;
 
 import com.nhnacademy.jpa.family.config.WebConfig;
+import com.nhnacademy.jpa.family.domain.birthDeath.BirthParentDto;
+import com.nhnacademy.jpa.family.domain.birthDeath.BirthResidentDto;
+import com.nhnacademy.jpa.family.domain.birthDeath.DeathResidentDto;
+import com.nhnacademy.jpa.family.domain.birthDeath.ReporterDto;
 import com.nhnacademy.jpa.family.domain.household.HouseholdCompositionDto;
 import com.nhnacademy.jpa.family.domain.household.HouseholderViewDto;
 import com.nhnacademy.jpa.family.domain.relation.FamilyRelationViewDto;
 import com.nhnacademy.jpa.family.entity.CtfIssue;
 import com.nhnacademy.jpa.family.entity.Household;
 import com.nhnacademy.jpa.family.entity.Resident;
+import com.nhnacademy.jpa.family.entity.code.BirthDeathType;
 import com.nhnacademy.jpa.family.entity.code.CtfType;
+import com.nhnacademy.jpa.family.entity.code.Gender;
 import com.nhnacademy.jpa.family.exception.CertificateNotFoundException;
 import com.nhnacademy.jpa.family.exception.ResidentNotFoundException;
-import com.nhnacademy.jpa.family.repository.household.HouseholdCompositionRepository;
+import com.nhnacademy.jpa.family.service.BirthDeathService;
 import com.nhnacademy.jpa.family.service.CtfService;
 import com.nhnacademy.jpa.family.service.HouseholdService;
 import com.nhnacademy.jpa.family.service.ResidentService;
@@ -24,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/ctf")
@@ -32,11 +39,14 @@ public class CertificateController {
 
     private final HouseholdService householdService;
 
+    private final BirthDeathService birthDeathService;
+
     private final CtfService ctfService;
 
-    public CertificateController(ResidentService residentService, HouseholdService householdService, CtfService ctfService) {
+    public CertificateController(ResidentService residentService, HouseholdService householdService, BirthDeathService birthDeathService, CtfService ctfService) {
         this.residentService = residentService;
         this.householdService = householdService;
+        this.birthDeathService = birthDeathService;
         this.ctfService = ctfService;
     }
 
@@ -85,10 +95,56 @@ public class CertificateController {
         return "/ctf/registrationView";
     }
 
-    private CtfIssue getCtfIssue(Resident base, CtfType 가족관계증명서) {
-        Long latestConfirmNum = ctfService.getLatestConfirmNum(가족관계증명서);
-        CtfIssue ctfIssue = new CtfIssue(base, 가족관계증명서);
+    @GetMapping("/death/{serialNum}")
+    public String viewDeathCtf(@PathVariable("serialNum") int targetSn,
+                                      Model model){
+        verifySerialNumber(targetSn);
+
+        Resident base = residentService.getResidentBySn(targetSn);
+
+        CtfType 사망신고서 = CtfType.사망신고서;
+        ctfService.insertCtfIssue(getCtfIssue(base, 사망신고서));
+
+        DeathResidentDto targetDto = birthDeathService.getDeathTargetInfoByTargetSn(targetSn);
+        ReporterDto reporterDto = birthDeathService.getReporterInfoByTargetSn(targetSn, BirthDeathType.사망);
+        model.addAttribute("target", targetDto);
+        model.addAttribute("reporter", reporterDto);
+
+        return "/ctf/deathView";
+
+    }
+
+    @GetMapping("/birth/{serialNum}")
+    public String viewBirthCtf(@PathVariable("serialNum") int targetSn,
+                               Model model){
+        verifySerialNumber(targetSn);
+
+        Resident base = residentService.getResidentBySn(targetSn);
+
+        CtfType 출생신고서 = CtfType.출생신고서;
+        ctfService.insertCtfIssue(getCtfIssue(base, 출생신고서));
+
+        BirthResidentDto targetDto = birthDeathService.getBirthTargetInfoByTargetSn(targetSn);
+        List<BirthParentDto> parentDtos = birthDeathService.getBirthParentInfoByTargetSn(targetSn);
+        Optional<BirthParentDto> OptFather = parentDtos.stream().filter(it -> it.getGender().equals(Gender.남)).findAny();
+        Optional<BirthParentDto> OptMother = parentDtos.stream().filter(it -> it.getGender().equals(Gender.여)).findAny();
+
+        ReporterDto reporterDto = birthDeathService.getReporterInfoByTargetSn(targetSn, BirthDeathType.출생);
+
+        model.addAttribute("target", targetDto);
+        model.addAttribute("reporter", reporterDto);
+        model.addAttribute("father", OptFather.orElseThrow(() -> new ResidentNotFoundException("No.7's father")));
+        model.addAttribute("mother", OptMother.orElseThrow(() -> new ResidentNotFoundException("No.7's mother")));
+
+        return "/ctf/birthView";
+
+    }
+
+    private CtfIssue getCtfIssue(Resident base, CtfType type) {
+        CtfIssue ctfIssue = new CtfIssue(base, type);
+        Long latestConfirmNum = ctfService.getLatestConfirmNum(type);
         ctfIssue.setConfirmNumber(latestConfirmNum);
+
         return ctfIssue;
     }
 

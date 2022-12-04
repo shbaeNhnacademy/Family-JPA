@@ -2,13 +2,12 @@ package com.nhnacademy.jpa.family.entity;
 
 import com.nhnacademy.jpa.family.entity.code.BirthDeathType;
 import com.nhnacademy.jpa.family.entity.code.Relationship;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
+
 
 @NoArgsConstructor
 @Getter
@@ -17,13 +16,8 @@ import java.time.LocalDate;
 @Table(name = "birth_death_report_resident")
 @ToString
 public class BirthDeathReportResident {
-    @Id
-    @Column(name = "resident_serial_number")
-    private Integer serialNumber;
-
-    @Id
-    @Column(name = "birth_death_type_code")
-    private BirthDeathType type;
+    @EmbeddedId
+    private Pk pk;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_resident_serial_number")
@@ -33,9 +27,11 @@ public class BirthDeathReportResident {
     private LocalDate reportDate;
 
     @Column(name = "birth_report_qualifications_code")
+    @Enumerated(EnumType.STRING)
     private Relationship birthRelationship;
 
     @Column(name = "death_report_qualifications_code")
+    @Enumerated(EnumType.STRING)
     private Relationship deathRelationship;
 
     @Column(name = "email_address")
@@ -43,5 +39,31 @@ public class BirthDeathReportResident {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode
+    @Getter
+    @Setter
+    @ToString
+    @Embeddable
+    public static class Pk implements Serializable {
+        @Column(name = "resident_serial_number")
+        private Integer serialNumber;
+
+        @Column(name = "birth_death_type_code")
+        @Enumerated(EnumType.STRING)
+        private BirthDeathType type;
+    }
+
+    @Transient
+    private Resident targetResident;
+
+    public BirthDeathReportResident(Resident targetResident,Resident reporter, LocalDate reportDate, String phoneNumber) {
+        this.reporter = reporter;
+        this.reportDate = reportDate;
+        this.phoneNumber = phoneNumber;
+        this.targetResident = targetResident;
+    }
 
 }

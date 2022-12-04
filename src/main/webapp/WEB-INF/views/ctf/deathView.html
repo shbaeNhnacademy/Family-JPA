@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>사망신고서 페이지</title>
+</head>
+<body>
+<a th:href="@{/}">주민 목록</a><br><br>
+<h2>사망신고서</h2><br/>
+<h5>(신고일 : <span th:text="${#temporals.format(reporter.reportDate,'yyyy년 MM월 dd일')}"></span>)</h5><br>
+<hr/>
+사망자 성명 : <span th:text="${target.name}"></span><br/>
+사망자 주민등록번호 : <span th:text="${target.registrationNumber}"></span><br/>
+사망자 사망일시 : <span th:text="${#temporals.format(target.deathDate,'yyyy년 MM월 dd일 HH시 mm분')}"></span>
+    <span>(사망지 시각 : 24시각제로 기재)</span><br/>
+사망자 장소구분 : <span th:text="${target.deathPlace}"></span><br/>
+사망자 주소 : <span th:text="${target.address}"></span><br/><br/><br/>
+
+신고자 성명 : <span th:text="${reporter.name}"></span><br/>
+신고자 주민등록번호 : <span th:text="${reporter.registrationNumber}"></span><br/>
+신고자 자격 : <span th:text="${reporter.relationship}"></span><br/>
+신고자 이메일 : <span th:text="${reporter.email}"></span><br/>
+신고자 전화번호 : <span th:text="${reporter.phone}"></span><br/>
+
+</body>
+</html>
