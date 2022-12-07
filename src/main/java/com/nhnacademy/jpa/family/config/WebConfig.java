@@ -13,11 +13,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
@@ -48,6 +46,18 @@ public class WebConfig implements WebMvcConfigurer, ApplicationContextAware, Mes
         registry.viewResolver(thymeleafViewResolver());
     }
 
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/redirect-index", "/");
+
+        registry.addViewController("/").setViewName("/index");
+//        registry.addViewController("/resident").setViewName("/resident/residentMain");
+        registry.addViewController("/auth/login").setViewName("/login/login");
+        registry.addViewController("/auth/logout").setViewName("/login/logout");
+        registry.addViewController("/error/403").setViewName("/error/error403");
+
+    }
+
     @Bean
     public ViewResolver thymeleafViewResolver(){
         ThymeleafViewResolver thymeleafViewResolver = new ThymeleafViewResolver();
@@ -62,6 +72,7 @@ public class WebConfig implements WebMvcConfigurer, ApplicationContextAware, Mes
         templateEngine.setTemplateResolver(templateResolver());
         templateEngine.setTemplateEngineMessageSource(messageSource);
         templateEngine.addDialect(new Java8TimeDialect());
+        templateEngine.addDialect(new SpringSecurityDialect());
         return templateEngine;
     }
 
@@ -85,11 +96,4 @@ public class WebConfig implements WebMvcConfigurer, ApplicationContextAware, Mes
                 .mediaType("xml", MediaType.APPLICATION_XML);
     }
 
-//    @Override
-//    public void addFormatters(FormatterRegistry registry) {
-//        DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
-//        registrar.setDateFormatter(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//        registrar.setDateTimeFormatter(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-//        registrar.registerFormatters(registry);
-//    }
 }

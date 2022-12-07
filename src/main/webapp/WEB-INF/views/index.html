@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8" />
+    <title>Index</title>
+</head>
+<body>
+    <h1>Index</h1>
+
+    <th:block th:include="fragments/heading" />
+
+    <br>
+    <ul>
+        <li sec:authorize="isAuthenticated()">
+            <a href="/">Resident List</a>
+        </li>
+    </ul>
+
+
+</body>
+</html>

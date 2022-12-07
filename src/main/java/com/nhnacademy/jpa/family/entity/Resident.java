@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -52,6 +53,18 @@ public class Resident {
     @Column(name = "death_place_address")
     private String deathPlaceAddress;
 
+    @Column(name = "auth_id")
+    private String authId;
+
+    @Column(name = "auth_email")
+    private String authEmail;
+
+    @Column(name = "auth_pwd")
+    private String authPwd;
+
+    @Column(name = "auth_social")
+    private String authSocial;
+
     public Resident(Integer latestSerialNumber, String name, String registrationNumber, Gender gender, LocalDateTime birthDate, BirthPlace birthPlace, String registrationAddress) {
         this.serialNumber = latestSerialNumber + 1;
         this.name = name;
@@ -62,11 +75,17 @@ public class Resident {
         this.registrationAddress = registrationAddress;
     }
 
-
     public void setDeathInfo(LocalDateTime deathDate, DeathPlace deathPlace, String deathPlaceAddress) {
         this.deathDate = deathDate;
         this.deathPlace = deathPlace;
         this.deathPlaceAddress = deathPlaceAddress;
+    }
+
+    public void setAuthInfo(String authId, @Nullable String authEmail, String authPwd, String authSocial) {
+        this.authId = authId;
+        this.authEmail = authEmail == null ? "" : authEmail;
+        this.authPwd = authPwd;
+        this.authSocial = authSocial;
     }
 
 }

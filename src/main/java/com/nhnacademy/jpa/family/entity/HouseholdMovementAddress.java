@@ -13,8 +13,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "household_movement_address")
 public class HouseholdMovementAddress {
-    public static final String LAST_YES = "Y";
-    public static final String LAST_NO = "N";
+
 
     @EmbeddedId
     private Pk pk;

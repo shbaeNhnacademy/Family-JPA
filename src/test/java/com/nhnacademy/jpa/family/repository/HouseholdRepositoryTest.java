@@ -1,12 +1,12 @@
 package com.nhnacademy.jpa.family.repository;
 
+import com.nhnacademy.jpa.family.Base;
 import com.nhnacademy.jpa.family.config.RootConfig;
 import com.nhnacademy.jpa.family.config.WebConfig;
 import com.nhnacademy.jpa.family.domain.SerialNumberOnly;
 import com.nhnacademy.jpa.family.domain.household.HouseholdCompositionDto;
 import com.nhnacademy.jpa.family.domain.household.HouseholderDto;
 import com.nhnacademy.jpa.family.entity.Household;
-import com.nhnacademy.jpa.family.entity.HouseholdMovementAddress;
 import com.nhnacademy.jpa.family.entity.code.Relationship;
 import com.nhnacademy.jpa.family.exception.HouseholdNotFoundException;
 import com.nhnacademy.jpa.family.repository.household.HouseholdRepository;
@@ -68,7 +68,7 @@ class HouseholdRepositoryTest {
         assertThat(dtos.size()).isEqualTo(3);
 
         List<HouseholderDto> dtoHasLastAddress = dtos.stream()
-                .filter(it -> it.getYesOrNo().equals(HouseholdMovementAddress.LAST_YES))
+                .filter(it -> it.getYesOrNo().equals(Base.YES))
                 .filter(it -> it.getMovementAddress().contains("경기도"))
                 .collect(Collectors.toList());
 

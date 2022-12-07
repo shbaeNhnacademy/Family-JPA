@@ -1,6 +1,6 @@
 package com.nhnacademy.jpa.family.domain.household;
 
-import com.nhnacademy.jpa.family.entity.HouseholdMovementAddress;
+import com.nhnacademy.jpa.family.Base;
 import com.nhnacademy.jpa.family.entity.code.CompositionReason;
 import lombok.Getter;
 import lombok.ToString;
@@ -24,7 +24,7 @@ public class HouseholderViewDto {
         private LocalDate reportDate;
 
         public HouseholderAddress(String yesOrNo, String address, LocalDate reportDate) {
-            this.presentStatus = yesOrNo.equals(HouseholdMovementAddress.LAST_YES) ? "현주소" : "주소";
+            this.presentStatus = yesOrNo.equals(Base.YES) ? "현주소" : "주소";
             this.address = address;
             this.reportDate = reportDate;
         }
