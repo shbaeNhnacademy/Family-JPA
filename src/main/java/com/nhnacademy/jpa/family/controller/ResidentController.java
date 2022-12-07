@@ -3,6 +3,7 @@ package com.nhnacademy.jpa.family.controller;
 import com.nhnacademy.jpa.family.config.WebConfig;
 import com.nhnacademy.jpa.family.entity.Resident;
 import com.nhnacademy.jpa.family.service.ResidentService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
+@Slf4j
 public class ResidentController {
     private final ResidentService residentService;
 

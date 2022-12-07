@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "resident")
-@ToString(of = {"serialNumber", "name", "registrationNumber"})
+@ToString(of = {"serialNumber", "name", "registrationNumber","authId"})
 public class Resident {
     @Id
     @Column(name = "resident_serial_number")

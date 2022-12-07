@@ -1,6 +1,6 @@
 package com.nhnacademy.jpa.family.controller.rest;
 
-import com.nhnacademy.jpa.family.Utils;
+import com.nhnacademy.jpa.family.utils.ProgramUtils;
 import com.nhnacademy.jpa.family.domain.household.HouseholdRegisterRequest;
 import com.nhnacademy.jpa.family.domain.household.MovementModifyRequest;
 import com.nhnacademy.jpa.family.domain.household.MovementRegisterRequest;
@@ -33,7 +33,7 @@ public class HouseholdRestController {
     @PostMapping
     public ResponseEntity<ResidentRegisterRequest> registerHousehold(@Valid @RequestBody HouseholdRegisterRequest householdRegisterRequest,
                                                                     BindingResult bindingResult) {
-        Utils.verifyValidation(bindingResult);
+        ProgramUtils.verifyValidation(bindingResult);
 
         Household household = householdService.insertHousehold(getNewHousehold(householdRegisterRequest));
         return ResponseEntity.created(URI.create("/household/"+household.getSerialNumber())).build();
@@ -61,7 +61,7 @@ public class HouseholdRestController {
     public ResponseEntity<MovementRegisterRequest> registerMovement(@PathVariable("householdSerialNumber") int householdSn,
                                                                     @Valid @RequestBody MovementRegisterRequest movementRegisterRequest,
                                                                     BindingResult bindingResult) {
-        Utils.verifyValidation(bindingResult);
+        ProgramUtils.verifyValidation(bindingResult);
         HouseholdMovementAddress householdMovementAddress = getNewMovement(movementRegisterRequest, householdSn);
         HouseholdMovementAddress movementAddress = householdService.saveMovement(householdMovementAddress);
         return ResponseEntity.created(URI.create("/household/" + householdSn + "/movement")).build();
@@ -81,7 +81,7 @@ public class HouseholdRestController {
                                                                   @PathVariable("reportDate") String strDate,
                                                                   @Valid @RequestBody MovementModifyRequest modifyRequest,
                                                                   BindingResult bindingResult){
-        Utils.verifyValidation(bindingResult);
+        ProgramUtils.verifyValidation(bindingResult);
 
         HouseholdMovementAddress movementByPk = getHouseholdMovementAddress(householdSn, strDate, modifyRequest);
         householdService.saveMovement(movementByPk);

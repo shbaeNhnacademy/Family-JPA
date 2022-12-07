@@ -1,6 +1,6 @@
 package com.nhnacademy.jpa.family.service.impl;
 
-import com.nhnacademy.jpa.family.Utils;
+import com.nhnacademy.jpa.family.utils.ProgramUtils;
 import com.nhnacademy.jpa.family.domain.relation.FamilyRelationDto;
 import com.nhnacademy.jpa.family.domain.relation.ResidentModifyRequest;
 import com.nhnacademy.jpa.family.domain.relation.FamilyRelationViewDto;
@@ -52,7 +52,7 @@ public class ResidentServiceImpl implements ResidentService{
         List<FamilyRelationDto> relationDtos = residentRepository.getResidentBySnFromFamilyRelationship(baseMemberSn);
         List<FamilyRelationViewDto> viewDtos = new ArrayList<>(); // 마킹된 주민번호 노출하기 위해
         for (FamilyRelationDto dto : relationDtos) {
-            String markedRegistrationNumber = Utils.getMarkedNumber(dto.getRegistrationNumber());
+            String markedRegistrationNumber = ProgramUtils.getMarkedNumber(dto.getRegistrationNumber());
             viewDtos.add(new FamilyRelationViewDto(
                     dto.getRelationship(),
                     dto.getName(),

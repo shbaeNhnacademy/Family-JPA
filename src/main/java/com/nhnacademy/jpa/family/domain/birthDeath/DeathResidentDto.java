@@ -1,6 +1,6 @@
 package com.nhnacademy.jpa.family.domain.birthDeath;
 
-import com.nhnacademy.jpa.family.Utils;
+import com.nhnacademy.jpa.family.utils.ProgramUtils;
 import com.nhnacademy.jpa.family.entity.code.DeathPlace;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Value;
@@ -18,7 +18,7 @@ public class DeathResidentDto {
     @QueryProjection
     public DeathResidentDto(String name, String registrationNumber, LocalDateTime deathDate, DeathPlace deathPlace, String address) {
         this.name = name;
-        this.registrationNumber = Utils.getMarkedNumber(registrationNumber);
+        this.registrationNumber = ProgramUtils.getMarkedNumber(registrationNumber);
         this.deathDate = deathDate;
         this.deathPlace = deathPlace;
         this.address = address;

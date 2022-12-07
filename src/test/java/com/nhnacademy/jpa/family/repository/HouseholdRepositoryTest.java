@@ -10,6 +10,7 @@ import com.nhnacademy.jpa.family.entity.Household;
 import com.nhnacademy.jpa.family.entity.code.Relationship;
 import com.nhnacademy.jpa.family.exception.HouseholdNotFoundException;
 import com.nhnacademy.jpa.family.repository.household.HouseholdRepository;
+import com.nhnacademy.jpa.family.utils.ProgramUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +69,7 @@ class HouseholdRepositoryTest {
         assertThat(dtos.size()).isEqualTo(3);
 
         List<HouseholderDto> dtoHasLastAddress = dtos.stream()
-                .filter(it -> it.getYesOrNo().equals(Base.YES))
+                .filter(it -> it.getYesOrNo().equals(ProgramUtils.YES))
                 .filter(it -> it.getMovementAddress().contains("경기도"))
                 .collect(Collectors.toList());
 

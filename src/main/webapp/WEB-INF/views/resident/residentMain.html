@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <style>
     * {
         width: 100%;
@@ -54,64 +55,66 @@
 </head>
 <body>
     <th:block th:include="fragments/heading" />
-    <header>
-        <h2>주민 목록</h2><br>
+    <div sec:authorize="isAuthenticated()">
+        <header>
+            <h2 style="padding-top: 20px">주민 목록</h2><br>
+        </header>
 
-    </header>
+        <div class="buttons">
+            <div class="button" th:if="${!page.isFirst()}">
+                <button type="button" th:onclick="|location.href='@{/(page=${page.getNumber()-1},size=${pageSize})}'|">이전</button>
+            </div>
+            <div class="button" th:if="${!page.isLast()}">
+                <button  type="button" th:onclick="|location.href='@{/(page=${page.getNumber()+1},size=${pageSize})}'|">다음</button>
+            </div>
+        </div>
 
-    <div class="buttons">
-        <div class="button" th:if="${!page.isFirst()}">
-            <button type="button" th:onclick="|location.href='@{/(page=${page.getNumber()-1},size=${pageSize})}'|">이전</button>
-        </div>
-        <div class="button" th:if="${!page.isLast()}">
-            <button  type="button" th:onclick="|location.href='@{/(page=${page.getNumber()+1},size=${pageSize})}'|">다음</button>
-        </div>
+        <main>
+            <table class="table">
+                <th class="tableHead" >No.</th>
+                <th class="tableHead" >이름</th>
+                <th class="tableHead" >생년월일</th>
+                <th class="tableHead" >가족관계증명서</th>
+                <th class="tableHead" >주민등록등본</th>
+                <th class="tableHead" >출생신고서</th>
+                <th class="tableHead" >사망신고서</th>
+                <th class="tableHead" >증명서 발급 목록</th>
+                <th class="tableHead" >삭제</th>
+
+                <tr th:each="resident : ${residents}">
+                    <td th:text="${resident.serialNumber}"></td>
+                    <td th:text="${resident.name}">
+                    </td>
+                    <td th:text="${#temporals.format(resident.birthDate,'yyyy년 MM월 dd일')}"></td>
+                    <td>
+                        <!--       가족관계증명서             -->
+                        <a th:href="@{/ctf/relation/{sn}(sn=${resident.serialNumber})}">출력</a>
+                    </td>
+                    <td>
+                        <!--       주민등록등본             -->
+                        <a th:href="@{/ctf/registration/{sn}(sn=${resident.serialNumber})}">출력</a>
+                    </td>
+                    <td>
+                        <!--       출생신고서             -->
+                        <a th:href="@{/ctf/birth/{sn}(sn=${resident.serialNumber})}">출력</a>
+                    </td>
+                    <td>
+                        <!--       사망신고서             -->
+                        <a th:href="@{/ctf/death/{sn}(sn=${resident.serialNumber})}">출력</a>
+                    </td>
+                    <td>
+                        <!--       증명서 발급 목록 링크             -->
+                        <a th:href="@{/ctf/issue/{sn}(sn=${resident.serialNumber})}">목록으로 가기</a>
+                    </td>
+                    <td>
+                        <form method="post" th:action="@{/{id}/delete(id=${resident.serialNumber})}">
+                            <input type="submit" value="삭제">
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </main>
     </div>
 
-    <main>
-        <table class="table">
-            <th class="tableHead" >No.</th>
-            <th class="tableHead" >이름</th>
-            <th class="tableHead" >생년월일</th>
-            <th class="tableHead" >가족관계증명서</th>
-            <th class="tableHead" >주민등록등본</th>
-            <th class="tableHead" >출생신고서</th>
-            <th class="tableHead" >사망신고서</th>
-            <th class="tableHead" >증명서 발급 목록</th>
-            <th class="tableHead" >삭제</th>
-
-            <tr th:each="resident : ${residents}">
-                <td th:text="${resident.serialNumber}"></td>
-                <td th:text="${resident.name}">
-                </td>
-                <td th:text="${#temporals.format(resident.birthDate,'yyyy년 MM월 dd일')}"></td>
-                <td>
-                    <!--       가족관계증명서             -->
-                    <a th:href="@{/ctf/relation/{sn}(sn=${resident.serialNumber})}">출력</a>
-                </td>
-                <td>
-                    <!--       주민등록등본             -->
-                    <a th:href="@{/ctf/registration/{sn}(sn=${resident.serialNumber})}">출력</a>
-                </td>
-                <td>
-                    <!--       출생신고서             -->
-                    <a th:href="@{/ctf/birth/{sn}(sn=${resident.serialNumber})}">출력</a>
-                </td>
-                <td>
-                    <!--       사망신고서             -->
-                    <a th:href="@{/ctf/death/{sn}(sn=${resident.serialNumber})}">출력</a>
-                </td>
-                <td>
-                    <!--       증명서 발급 목록 링크             -->
-                    <a th:href="@{/ctf/issue/{sn}(sn=${resident.serialNumber})}">목록으로 가기</a>
-                </td>
-                <td>
-                    <form method="post" th:action="@{/{id}/delete(id=${resident.serialNumber})}">
-                        <input type="submit" value="삭제">
-                    </form>
-                </td>
-            </tr>
-        </table>
-    </main>
 </body>
 </html>

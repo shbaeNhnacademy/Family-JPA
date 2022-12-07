@@ -1,6 +1,6 @@
 package com.nhnacademy.jpa.family.controller.rest;
 
-import com.nhnacademy.jpa.family.Utils;
+import com.nhnacademy.jpa.family.utils.ProgramUtils;
 import com.nhnacademy.jpa.family.domain.relation.RelationshipRequest;
 import com.nhnacademy.jpa.family.domain.relation.ResidentModifyRequest;
 import com.nhnacademy.jpa.family.domain.relation.ResidentRegisterRequest;
@@ -35,7 +35,7 @@ public class ResidentRestController {
     @PostMapping
     public ResponseEntity<ResidentRegisterRequest> registerResident(@Valid @RequestBody ResidentRegisterRequest residentRegisterRequest,
                                                                     BindingResult bindingResult) {
-        Utils.verifyValidation(bindingResult);
+        ProgramUtils.verifyValidation(bindingResult);
         Resident resident = residentService.insertResident(getNewResident(residentRegisterRequest));
         return ResponseEntity.created(URI.create("/residents/"+resident.getSerialNumber())).build();
     }
@@ -64,7 +64,7 @@ public class ResidentRestController {
     public ResponseEntity<RelationshipRequest> registerRelationship(@PathVariable("serialNumber") int baseSn,
                                                                     @Valid @RequestBody RelationshipRequest relationshipRequest,
                                                                     BindingResult bindingResult) {
-        Utils.verifyValidation(bindingResult);
+        ProgramUtils.verifyValidation(bindingResult);
         FamilyRelationship insertRelationship =
                 settingFamilyRelationship(baseSn, relationshipRequest.getFamilySerialNumber(), relationshipRequest);
         return ResponseEntity
@@ -78,7 +78,7 @@ public class ResidentRestController {
                                    @PathVariable("familySerialNumber") int familySn,
                                    @Valid @RequestBody RelationshipRequest relationshipRequest,
                                    BindingResult bindingResult) {
-        Utils.verifyValidation(bindingResult);
+        ProgramUtils.verifyValidation(bindingResult);
         settingFamilyRelationship(baseSn, familySn, relationshipRequest);
         return ResponseEntity.ok(relationshipRequest);
     }
