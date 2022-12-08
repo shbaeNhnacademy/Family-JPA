@@ -24,5 +24,6 @@ public interface ResidentRepository extends JpaRepository<Resident,Integer> {
     SerialNumberOnly findFirstByOrderBySerialNumberDesc();
 
     Optional<Resident> findByAuthId(String authId);
+    Optional<Resident> findByAuthEmail(String authEmail);
 
 }

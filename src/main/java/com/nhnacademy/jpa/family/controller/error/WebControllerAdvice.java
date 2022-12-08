@@ -1,6 +1,7 @@
 package com.nhnacademy.jpa.family.controller.error;
 
 
+import com.nhnacademy.jpa.family.exception.ResidentNotFoundException;
 import com.nhnacademy.jpa.family.exception.ValidationFailedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,10 @@ public class WebControllerAdvice {
     private final String EXCEPTION = "exception";
     private final String THYMELEAF_ERROR = "error/error";
 
+    @ExceptionHandler(ResidentNotFoundException.class)
+    public String handleResidentNotFoundException() {
+        return "/redirect-index";
+    }
     @ExceptionHandler(ValidationFailedException.class)
     public ResponseEntity<String> handleValidationFailedException(ValidationFailedException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());

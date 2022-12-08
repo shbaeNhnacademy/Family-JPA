@@ -13,6 +13,4 @@ public interface HouseholdCompositionRepository
             "inner join fetch Household h on hc.pk.householdId = h.serialNumber " +
             "where hc.pk.memberSerialNumber = :memberSn")
     Integer getHouseholderSnByMemberSn(@Param("memberSn") int memberSn);
-
-
 }

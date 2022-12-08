@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
@@ -15,19 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-            throws ServletException, IOException {
-        super.onAuthenticationSuccess(request, response, authentication);
-        UserDetails principal = (UserDetails) authentication.getPrincipal();
-        log.error("{}",principal.getUsername());
+            throws IOException {
+
+        OAuth2User principal = (OAuth2User) authentication.getPrincipal();
         List<GrantedAuthority> authorities = new ArrayList<>(principal.getAuthorities());
 
-        HttpSession session = request.getSession(false);;
-        session.setAttribute("username", principal.getUsername());
+        HttpSession session = request.getSession(true);
+        session.setAttribute("username", principal.getAttribute("email"));
         session.setAttribute("authority", authorities.get(0).getAuthority());
-
+        response.sendRedirect("/redirect-index");
     }
 }
