@@ -1,7 +1,6 @@
 package com.nhnacademy.jpa.family.controller;
 
 import com.nhnacademy.jpa.family.handler.OAuth2LoginSuccessHandler;
-import com.nhnacademy.jpa.family.service.CustomAuth2UserDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -11,12 +10,14 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -67,12 +69,13 @@ public class OAuthController {
 
     @GetMapping("/login/oauth2/code/github")
     public void getGrantCode(HttpServletRequest request,
-                             HttpServletResponse response) throws IOException, ServletException {
-        String queryString = request.getQueryString();
-        String[] split = queryString.split("&");
+                             HttpServletResponse response,
+                             @RequestParam("code") String code,
+                             @RequestParam("state") String state) throws IOException, ServletException {
 
-        String code = split[0].split("=")[1];
-        String state = split[1].split("=")[1];
+        if (Objects.isNull(code) || Objects.isNull(state)) {
+            throw new IllegalArgumentException();
+        }
 
         if (!state.equals(STATE)) {
             return;
@@ -81,7 +84,13 @@ public class OAuthController {
         Map attrMap = exchangeForGithubAttr(requestToGithubForAccessToken(code));
 
         String email = (String) attrMap.get("email");
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        UserDetails userDetails = null;
+        try {
+            userDetails = userDetailsService.loadUserByUsername(email);
+        } catch (UsernameNotFoundException e) {
+            response.sendRedirect("/auth/login");
+            return;
+        }
         OAuth2User oAuth2User = new DefaultOAuth2User(userDetails.getAuthorities(), attrMap, "email");
 
         OAuth2AuthenticationToken authenticationToken = new OAuth2AuthenticationToken(oAuth2User, oAuth2User.getAuthorities(), clientName);
